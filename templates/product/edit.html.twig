@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} {{ 'Edit Product'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'Edit Product'|trans }}</h1>
+    {% include 'App:Product:form.html.twig' with {
+        'form': form
+    } %}
+{% endblock %}

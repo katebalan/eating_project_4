@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} {{ 'Our Users'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="ea-page__header">
+        <h1>{{ 'Our Users'|trans }}</h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_new') }}" class="btn btn-primary btn-lg">{{ 'New User'|trans }}</a>
+        {% endif %}
+    </div>
+    <div class="ea-list">
+        {% for user in users %}
+            <div class="ea-block ea-block--flex">
+                <div class="ea-block__edit-btn__wrapper">
+                    <a href="{{ path('user_show', {'id': user.id}) }}" class="ea-block__edit-btn">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="ea-block__edit-btn">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a href="{{ path('user_edit_password', {'id': user.id}) }}" class="ea-block__edit-btn">
+                        <span class="glyphicon glyphicon-lock"></span>
+                    </a>
+                </div>
+                <div class="ea-block__left">
+                    <div class="ea-block__header">
+                        {% if user.firstName and user.secondName %}
+                            {{ user.firstName }} {{ user.secondName }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </div>
+                    <div class="ea-block__date">{{ 'Member from'|trans }} {{ user.createdAt|date("m/d/Y") }}</div>
+                    <div class="ea-devider"></div>
+                    <div class="ea-block__info">
+                        <div>{{ user.username }}</div>
+                        <div>{{ user.phone }}</div>
+                        {% if user.gender %}
+                            {{ 'Male'|trans }}
+                        {% else %}
+                            {{ 'Female'|trans }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="ea-block__right">
+                    <img src="{{ user.image ? asset('files/user/' ~ user.image) : asset('img/no-image.png') }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

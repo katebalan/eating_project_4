@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} {{ 'Products'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="ea-page__header">
+        <h1>{{ 'Products'|trans }}</h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('product_new') }}" class="btn btn-primary btn-lg">{{ 'New Product'|trans }}</a>
+        {% endif %}
+    </div>
+    <div>
+        {% for product in products %}
+            <div class="ea-block ea-block--flex ea-block--fixed">
+                <div class="ea-block__left">
+                    <div class="ea-block__header">{{ product.name }}</div>
+                    <div class="ea-block__date">Created at {{ product.createdAt|date("m/d/Y") }}</div>
+                    <div class="ea-devider"></div>
+                    <div class="ea-block__info">
+                        kkal: {{ product.kkalPer100gr }} /
+                        proteins: {{ product.proteinsPer100gr }} /
+                        fats: {{ product.fatsPer100gr }} /
+                        carbohydrates: {{ product.carbohydratesPer100gr }}
+                    </div>
+                    <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">{{ 'Show'|trans }}</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
+                    {% endif %}
+                </div>
+                <div class="ea-block__right">
+                    <img src="{{ product.image ? asset('files/products/' ~ product.image) : asset('img/no-image.png') }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

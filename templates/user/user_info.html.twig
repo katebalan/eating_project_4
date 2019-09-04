@@ -1,0 +1,63 @@
+<div class="ea-block ea-block--flex">
+    <div class="ea-block__left">
+        <div class="ea-block__edit-btn__wrapper">
+            <a href="{{ path('user_edit', {'id': user.id}) }}" class="ea-block__edit-btn">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+            <a href="{{ path('user_edit_password', {'id': user.id}) }}" class="ea-block__edit-btn">
+                <span class="glyphicon glyphicon-lock"></span>
+            </a>
+        </div>
+        <div class="ea-block__header">
+            {% if user.firstName and user.secondName %}
+                {{ user.firstName }} {{ user.secondName }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+        </div>
+        <div class="ea-block__date">{{ 'Member from'|trans }} {{ user.createdAt|date("m/d/Y") }}</div>
+        <div class="ea-devider"></div>
+        <div class="ea-block__info">
+            <div>{{ user.username }}</div>
+            <div>{{ user.phone }}</div>
+            {% if user.gender %}
+                {{ 'Male'|trans }}
+            {% else %}
+                {{ 'Female'|trans }}
+            {% endif %}
+        </div>
+        <table class="ea-table-5 table table-striped">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>{{ 'Kkal'|trans }}</td>
+                    <td>{{ 'Proteins'|trans }}</td>
+                    <td>{{ 'Fats'|trans }}</td>
+                    <td>{{ 'Carbohydrates'|trans }}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'Daily'|trans }}</td>
+                    <td>{{ user.dailyKkal }}</td>
+                    <td>{{ user.dailyProteins }}</td>
+                    <td>{{ user.dailyFats }}</td>
+                    <td>{{ user.dailyCarbohydrates }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'Current'|trans }}</td>
+                    <td>{{ user.currentKkal }}</td>
+                    <td>{{ user.currentProteins }}</td>
+                    <td>{{ user.currentFats }}</td>
+                    <td>{{ user.currentCarbohydrates }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="{{ path('consumption_new', {'id': user.id}) }}" class="btn btn-primary">{{ 'New consumption'|trans }}</a>
+        <a href="{{ path('recommendation_list') }}" class="btn btn-primary">{{ 'Recommendations'|trans }}</a>
+        <a href="{{ path('consumption_history', {'id': user.id}) }}" class="btn btn-primary">{{ 'History'|trans }}</a>
+    </div>
+    <div class="ea-block__right">
+        <img src="{{ user.image ? asset('files/user/' ~ user.image) : asset('img/no-image.png') }}">
+    </div>
+</div>
