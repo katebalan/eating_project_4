@@ -6,14 +6,16 @@ use App\Entity\User;
 use App\Form\UserFormType;
 use App\Form\UserPasswordType;
 use App\Service\CountService;
-use FOS\RestBundle\Controller\Annotations as Rest;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Count;
 
 /**
  * Class UserController
@@ -21,6 +23,21 @@ use Symfony\Component\Validator\Constraints\Count;
  */
 class UserController extends Controller
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * UserController constructor.
+     *
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * Controller are used to show all users in system
      *
@@ -30,8 +47,7 @@ class UserController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('App:User')->findAll();
+        $users = $this->em->getRepository('App:User')->findAll();
 
         return [
             'users' => $users
@@ -62,9 +78,8 @@ class UserController extends Controller
             $user->setPlainPassword('fuckyou');
             $user->setCreatedAt(new \DateTime('now'));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'New user is created!');
             return $this->redirectToRoute('user_list');
@@ -86,8 +101,6 @@ class UserController extends Controller
      */
     public function showAction(User $user, CountService $countService)
     {
-        $em = $this->getDoctrine()->getManager();
-
         if (!$this->isGranted('ROLE_ADMIN') && $this->getUser() != $user) {
             throw new AccessDeniedException('This user does not have access to this action.');
         }
@@ -98,7 +111,7 @@ class UserController extends Controller
 
         $date = new \DateTime();
 
-        $consumption = $em->getRepository('App:Consumption')->findByDateAndUserActive($user, $date);
+        $consumption = $this->em->getRepository('App:Consumption')->findByDateAndUserActive($user, $date);
 
         if ( empty($consumption)) {
             $user->setCurrentKkal(0);
@@ -107,8 +120,8 @@ class UserController extends Controller
             $user->setCurrentCarbohydrates(0);
         }
 
-        $em->persist($user);
-        $em->flush();
+        $this->em->persist($user);
+        $this->em->flush();
 
         $day_consumption = array();
 
@@ -160,11 +173,9 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            var_dump($user);
-            exit;
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'User is updated!');
 
@@ -181,7 +192,7 @@ class UserController extends Controller
      * @param Request $request
      * @param User|null $user
      * @Route("/user/{id}/edit_password", name="user_edit_password")
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      *
      * @Template()
      */
@@ -196,15 +207,13 @@ class UserController extends Controller
         }
 
         $form = $this->createForm(UserPasswordType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'User\'s password is updated!');
 

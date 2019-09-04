@@ -70,12 +70,8 @@ class FileUploadListener
         if (!($entity instanceof Products or $entity instanceof Activity)) {
             return;
         }
-        if ($entity instanceof Products) {
-            $folder = "products";
-        }
-        if ($entity instanceof Activity) {
-            $folder = "activity";
-        }
+
+        $folder = $this->getFolder($entity);
 
         $file = $entity->getImage();
 
@@ -104,16 +100,27 @@ class FileUploadListener
         if (!($entity instanceof Products or $entity instanceof Activity)) {
             return;
         }
-        if ($entity instanceof Products) {
-            $folder = "products";
-        }
-        if ($entity instanceof Activity) {
-            $folder = "activity";
-        }
+
+        $folder = $this->getFolder($entity);
 
         if ($fileName = $entity->getImage()) {
             $entity->setImage(new File($this->uploader->getTargetDirectory() . $folder . '/' . $fileName));
             $this->file = $entity->getImage();
         }
+    }
+
+    private function getFolder($object)
+    {
+        $folder = '';
+
+        if ($object instanceof Products) {
+            $folder = "products";
+        }
+
+        if ($object instanceof Activity) {
+            $folder = "activity";
+        }
+
+        return $folder;
     }
 }

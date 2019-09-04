@@ -8,7 +8,11 @@ use App\Form\LoginFormType;
 use App\Form\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use App\Service\CountService;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +26,21 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 class SecurityController extends Controller
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * SecurityController constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
     /**
      * Controller are used to login users
      *
@@ -92,9 +111,8 @@ class SecurityController extends Controller
             $user = $countService->countDailyValues($user);
             $user->setCreatedAt(new \DateTime('now'));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'Welcome '.$user->getFirstName().' '.$user->getSecondName());
 

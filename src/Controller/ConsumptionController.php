@@ -6,7 +6,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ConsumptionFormType;
 use App\Service\CountService;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,6 +24,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ConsumptionController extends Controller
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * ConsumptionController constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
     /**
      * Controller are used for create new consumption only for user,
      * that is log in system, and change current values in user entity
@@ -35,9 +54,7 @@ class ConsumptionController extends Controller
      */
     public function newAction(CountService $countService, Request $request, User $user)
     {
-        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(ConsumptionFormType::class);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -49,9 +66,9 @@ class ConsumptionController extends Controller
 
             $user = $countService->countCurrentValues($user, $consumption->getHowMuch(), $consumption->getProduct());
 
-            $em->persist($consumption);
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($consumption);
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'You have eaten ' . $consumption->getProduct()->getName() . '!');
 

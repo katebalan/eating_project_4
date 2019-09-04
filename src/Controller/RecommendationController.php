@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -16,6 +19,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class RecommendationController extends Controller
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * RecommendationController constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+    /**
      * Controller are used to recommend products
      *
      * @return array
@@ -24,8 +42,7 @@ class RecommendationController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('App:Products')->findAllOrderedByDescActive();
+        $products = $this->em->getRepository('App:Products')->findAllOrderedByDescActive();
 
         $pr = array();
 

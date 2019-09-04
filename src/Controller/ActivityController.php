@@ -5,9 +5,14 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Form\ActivityFormType;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -19,6 +24,21 @@ use Symfony\Component\HttpFoundation\Request;
 class ActivityController extends Controller
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * ActivityController constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+    /**
      * Show list of all activity
      *
      * @return mixed
@@ -27,8 +47,7 @@ class ActivityController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $activity = $em->getRepository('App:Activity')->findAll();
+        $activity = $this->em->getRepository('App:Activity')->findAll();
 
         return [
             'activity' => $activity
@@ -54,9 +73,8 @@ class ActivityController extends Controller
             $activity = $form->getData();
             $activity->setCreatedAt(new \DateTime('now'));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activity);
-            $em->flush();
+            $this->em->persist($activity);
+            $this->em->flush();
 
             $this->addFlash('success', 'New activity is creted!');
 
@@ -88,7 +106,7 @@ class ActivityController extends Controller
      *
      * @param Request $request
      * @param Activity $activity
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      * @Route("/{id}/edit", name="activity_edit")
      * @Template()
      */
@@ -105,9 +123,8 @@ class ActivityController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $activity = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activity);
-            $em->flush();
+            $this->em->persist($activity);
+            $this->em->flush();
 
             $this->addFlash('success', 'Activity is updated!');
 
@@ -123,7 +140,7 @@ class ActivityController extends Controller
      * Delete activity
      *
      * @param Activity|null $activity
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      * @Route("/{id}/delete", name="activity_delete")
      */
     public function deleteAction(?Activity $activity)
@@ -131,9 +148,8 @@ class ActivityController extends Controller
         if (!$activity) {
             throw $this->createNotFoundException('The activity does not exist');
         } else {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($activity);
-            $em->flush();
+            $this->em->remove($activity);
+            $this->em->flush();
 
             $this->addFlash('success', 'Activity '.$activity->getName().' was deleted!');
         }

@@ -5,10 +5,15 @@ namespace App\Controller;
 
 use App\Entity\Products;
 use App\Form\ProductsFormType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class ProductsController
@@ -19,6 +24,21 @@ use Symfony\Component\HttpFoundation\Request;
 class ProductController extends Controller
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * ProductController constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+    /**
      * Controller are used for show list of all products
      *
      * @return mixed
@@ -27,8 +47,7 @@ class ProductController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('App:Products')->findAllOrderedByDescActive();
+        $products = $this->em->getRepository('App:Products')->findAllOrderedByDescActive();
 
         return [
             'products' => $products
@@ -39,7 +58,7 @@ class ProductController extends Controller
      * Controller are used to create new product
      *
      * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      * @Route("/new", name="product_new")
      * @Template()
      * @throws \Exception
@@ -54,14 +73,14 @@ class ProductController extends Controller
             $product = $form->getData();
             $product->setCreatedAt(new \DateTime('now'));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
+            $this->em->persist($product);
+            $this->em->flush();
 
             $this->addFlash('success', 'New product is created!');
 
             return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
         }
+
         return [
             'form' => $form->createView()
         ];
@@ -104,9 +123,8 @@ class ProductController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
+            $this->em->persist($product);
+            $this->em->flush();
 
             $this->addFlash('success', 'Product is updated!');
 
@@ -120,7 +138,7 @@ class ProductController extends Controller
 
     /**
      * @param Products|null $product
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      * @Route("/{id}/delete", name="product_delete")
      */
     public function deleteAction(?Products $product)
@@ -128,9 +146,8 @@ class ProductController extends Controller
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');
         } else {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($product);
-            $em->flush();
+            $this->em->remove($product);
+            $this->em->flush();
 
             $this->addFlash('success', 'Product '.$product->getName().' was deleted!');
         }
