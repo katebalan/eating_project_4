@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -67,6 +68,7 @@ class SecurityController extends Controller
      * @param CountService $countService
      * @param GuardAuthenticatorHandler $authenticatorHandler
      * @param LoginFormAuthenticator $authenticator
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return mixed
      * @Route("/register", name="user_register")
      * @throws \Exception
@@ -75,15 +77,17 @@ class SecurityController extends Controller
         CountService $countService,
         Request $request,
         GuardAuthenticatorHandler $authenticatorHandler,
-        LoginFormAuthenticator $authenticator
+        LoginFormAuthenticator $authenticator,
+        UserPasswordEncoderInterface $passwordEncoder
     ) {
-        $form = $this->createForm(UserRegistrationFormType::class);
+        $user = new User();
+        $form = $this->createForm(UserRegistrationFormType::class, $user);
 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $form->getData();
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
 
             $user = $countService->countDailyValues($user);
             $user->setCreatedAt(new \DateTime('now'));

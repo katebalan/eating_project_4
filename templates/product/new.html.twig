@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>{{ 'New Product'|trans }}</h1>
-    {% include 'App:Product:form.html.twig' with {
+    {% include 'product/form.html.twig' with {
         'form': form
     } %}
 {% endblock %}
