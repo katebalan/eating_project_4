@@ -8,12 +8,12 @@ use App\Form\ActivityFormType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ActivityController
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/activity")
  */
-class ActivityController extends Controller
+class ActivityController extends AbstractController
 {
     /**
      * @var EntityManagerInterface

@@ -39,6 +39,25 @@
                     {% endif %}
                 </ul>
             </li>
+
+            {% for locale in locales %}
+                {% if locale == app.request.getLocale() %}
+                    <li>
+                        <a class="bfs-switch__link bfs-switch__link--active"
+                           href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get('_route_params')|merge({"_locale": locale})) }}">
+                            {{ locale|upper }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="bfs-switch__link"
+                           href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get('_route_params')|merge({"_locale": locale})) }}">
+                            {{ locale|upper }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
         </ul>
     </div>
 </nav>

@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+
 use App\Form\LoginFormType;
+
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +42,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        return $request->getPathInfo() == "/login" && $request->isMethod('POST');
+        return $request->attributes->get('_route') === 'security_login' && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request)

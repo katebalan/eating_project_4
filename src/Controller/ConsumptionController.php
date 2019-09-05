@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class ConsumptionController
  * @package App\Controller
  */
-class ConsumptionController extends Controller
+class ConsumptionController extends AbstractController
 {
     /**
      * @var EntityManagerInterface
