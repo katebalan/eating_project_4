@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  db:
+    image: mariadb/server:10.3
+    container_name: ea_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eating_project
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  application:
+    image: ea_symfony
+    container_name: ea_symfony
+    build:
+      context: ./docker/application
+      dockerfile: Dockerfile
+    ports:
+      - "83:80"
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html/application
+      - ./docker/application/.env:/var/www/html/application/.env
+
+#  python:
+#    image: ea_python
+#    container_name: ea_python
+#    restart: always
+#    depends_on:
+#      - application
+#    build:
+#      context: ./docker/python
+#      dockerfile: Dockerfile
+#    entrypoint:
+#      - python
+#      - test.py
+#    volumes:
+#      - ./python:/var/www/python
+
+volumes:
+  db_data:

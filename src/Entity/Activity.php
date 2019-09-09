@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Activity
+ *
+ * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="activity")
  */

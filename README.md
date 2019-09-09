@@ -19,3 +19,4 @@ if you have some problems with cache, logs or sessions, you can use:
 in web/data/ folder you can find database.
 
 https://symfonycasts.com/screencast/symfony4-upgrade/flex#play
+https://symfonycasts.com/screencast/api-platform/install
