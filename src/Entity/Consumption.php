@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Consumption
+ *
  * @ORM\Entity(repositoryClass="App\Repository\ConsumptionRepository")
  * @ORM\Table(name="consumption")
  */

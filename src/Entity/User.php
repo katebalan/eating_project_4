@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
+ *
  * @ORM\Entity
  * @ORM\Table(name="user")
  * @UniqueEntity(fields={"email"}, message="It looks like you already have account!")
@@ -147,10 +148,39 @@ class User implements UserInterface
      */
     private $image;
 
-    public function getUsername() {
+    /**
+     * Magic to string method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
         return $this->email;
     }
 
+    /**
+     * Get roles
+     *
+     * @return array
+     */
     public function getRoles()
     {
         $roles = $this->roles;
@@ -163,22 +193,37 @@ class User implements UserInterface
         return $roles;
     }
 
+    /**
+     * Get password
+     *
+     * @return string|null
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * Gat salt
+     *
+     * @return string|void|null
+     */
     public function getSalt()
     {
         // leaving blank - I don't need/have a password!
     }
 
+    /**
+     * Erase credentials
+     */
     public function eraseCredentials()
     {
         $this->plainPassword = null;
     }
 
     /**
+     * Add role
+     *
      * @param mixed $roles
      */
     public function setRoles($roles)
@@ -187,6 +232,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get plain password
+     *
      * @return string
      */
     public function getPlainPassword()
@@ -195,6 +242,8 @@ class User implements UserInterface
     }
 
     /**
+     * Set plain password
+     *
      * @param string $plainPassword
      */
     public function setPlainPassword($plainPassword)
@@ -204,6 +253,8 @@ class User implements UserInterface
     }
 
     /**
+     * Set password
+     *
      * @param mixed $password
      */
     public function setPassword($password)
@@ -211,13 +262,6 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @return mixed

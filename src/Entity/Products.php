@@ -3,11 +3,18 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Products
+ *
+ * @ApiResource(
+ *     normalizationContext={"groups"={"product:read"}},
+ *     denormalizationContext={"groups"={"product:write"}},
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductsRepository")
  * @ORM\Table(name="products")
  */
@@ -17,46 +24,55 @@ class Products
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @Groups({"product:read", "product:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"product:read", "product:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product:read", "product:write"})
      */
     private $kkal_per_100gr;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:read", "product:write"})
      */
     private $proteins_per_100gr;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:read", "product:write"})
      */
     private $fats_per_100gr;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:read", "product:write"})
      */
     private $carbohydrates_per_100gr;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"product:read", "product:write"})
      */
     private $rating;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"product:read", "product:write"})
      */
     private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Consumption", mappedBy="product")
+     * @Groups({"none"})
      */
     private $consumption;
 
@@ -64,6 +80,7 @@ class Products
      * @ORM\Column(type="string", nullable=true)
      *
      * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
+     * @Groups({"none"})
      */
     private $image;
 

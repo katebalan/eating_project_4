@@ -20,3 +20,4 @@ in web/data/ folder you can find database.
 
 https://symfonycasts.com/screencast/symfony4-upgrade/flex#play
 https://symfonycasts.com/screencast/api-platform/install
+curl -X GET "http://localhost:8000/api/activities" -H "accept: application/json" | python -m json.tool

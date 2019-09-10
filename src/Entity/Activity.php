@@ -5,12 +5,16 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Activity
  *
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"activity:read"}},
+ *     denormalizationContext={"groups"={"activity:write"}},
+ * )
  * @ORM\Entity
  * @ORM\Table(name="activity")
  */
@@ -20,41 +24,49 @@ class Activity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $kkal_per_5minutes;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $proteins_per_5minutes;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $fats_per_5minutes;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $carbohydrates_per_5minutes;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"activity:read", "activity:write"})
      */
     private $rating;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"activity:read", "activity:write"})
      */
     private $createdAt;
 
@@ -62,8 +74,19 @@ class Activity
      * @ORM\Column(type="string", nullable=true)
      *
      * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
+     * @Groups({"none"})
      */
     private $image;
+
+    /**
+     * Magic to string method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
 
     /**
      * @return mixed
