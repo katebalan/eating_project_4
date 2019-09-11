@@ -4,7 +4,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+
+use App\Entity\Traits\UpdateTimestampsTrait;
+
 use Doctrine\ORM\Mapping as ORM;
+
+
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +26,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Activity
 {
+    use UpdateTimestampsTrait;
+
     /**
+     * Id
+     * @var integer $id
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -29,51 +40,65 @@ class Activity
     private $id;
 
     /**
+     * Name
+     * @var string $name
+     *
      * @ORM\Column(type="string")
      * @Groups({"activity:read", "activity:write"})
      */
     private $name;
 
     /**
+     * Kkal per 5 minutes
+     * @var integer $kkalPer5Minutes
+     *
      * @ORM\Column(type="integer", name="kkal_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
     private $kkalPer5Minutes;
 
     /**
+     * Proteins per 5 minutes
+     * @var float $proteinsPer5Minutes
+     *
      * @ORM\Column(type="float", name="proteins_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
     private $proteinsPer5Minutes;
 
     /**
+     * Fats per 5 minutes
+     * @var float $fatsPer5Minutes
+     *
      * @ORM\Column(type="float", name="fats_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
     private $fatsPer5Minutes;
 
     /**
+     * Carbohydrates per 5 minutes
+     * @var float $carbohydratesPer5Minutes
+     *
      * @ORM\Column(type="float", name="carbohydrates_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
     private $carbohydratesPer5Minutes;
 
     /**
+     * Rating
+     * @var integer $rating
+     *
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"activity:read", "activity:write"})
      */
     private $rating;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Groups({"activity:read", "activity:write"})
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
+     * Image
+     * @var File $image
      *
-     * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png"})
      * @Groups({"none"})
      */
     private $image;
@@ -83,141 +108,155 @@ class Activity
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): ?string
     {
         return (string) $this->getId();
     }
 
     /**
-     * @return mixed
+     * Get id
+     *
+     * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * Get name
+     *
+     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
+     * Set name
+     *
+     * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * Get kkal per 5 minutes
+     *
+     * @return integer
      */
-    public function getKkalPer5Minutes()
+    public function getKkalPer5Minutes(): ?int
     {
         return $this->kkalPer5Minutes;
     }
 
     /**
-     * @param mixed $kkalPer5Minutes
+     * Set kkal per 5 minutes
+     *
+     * @param integer $kkalPer5Minutes
      */
-    public function setKkalPer5Minutes($kkalPer5Minutes)
+    public function setKkalPer5Minutes($kkalPer5Minutes): void
     {
         $this->kkalPer5Minutes = $kkalPer5Minutes;
     }
 
     /**
-     * @return mixed
+     * Get proteins per 5 minutes
+     *
+     * @return float
      */
-    public function getProteinsPer5Minutes()
+    public function getProteinsPer5Minutes(): ?float
     {
         return $this->proteinsPer5Minutes;
     }
 
     /**
-     * @param mixed $proteinsPer5Minutes
+     * Set proteins per 5 minutes
+     *
+     * @param float $proteinsPer5Minutes
      */
-    public function setProteinsPer5Minutes($proteinsPer5Minutes)
+    public function setProteinsPer5Minutes($proteinsPer5Minutes): void
     {
         $this->proteinsPer5Minutes = $proteinsPer5Minutes;
     }
 
     /**
-     * @return mixed
+     * Get fats per 5 minutes
+     *
+     * @return float
      */
-    public function getFatsPer5Minutes()
+    public function getFatsPer5Minutes(): ?float
     {
         return $this->fatsPer5Minutes;
     }
 
     /**
-     * @param mixed $fatsPer5Minutes
+     * Set fats per 5 minutes
+     *
+     * @param float $fatsPer5Minutes
      */
-    public function setFatsPer5Minutes($fatsPer5Minutes)
+    public function setFatsPer5Minutes($fatsPer5Minutes): void
     {
         $this->fatsPer5Minutes = $fatsPer5Minutes;
     }
 
     /**
-     * @return mixed
+     * Get carbohydrates per 5 minutes
+     *
+     * @return float
      */
-    public function getCarbohydratesPer5Minutes()
+    public function getCarbohydratesPer5Minutes(): ?float
     {
         return $this->carbohydratesPer5Minutes;
     }
 
     /**
-     * @param mixed $carbohydratesPer5Minutes
+     * Set carbohydrates per 5 minutes
+     *
+     * @param float $carbohydratesPer5Minutes
      */
-    public function setCarbohydratesPer5Minutes($carbohydratesPer5Minutes)
+    public function setCarbohydratesPer5Minutes($carbohydratesPer5Minutes): void
     {
         $this->carbohydratesPer5Minutes = $carbohydratesPer5Minutes;
     }
 
     /**
-     * @return mixed
+     * Get rating
+     *
+     * @return integer
      */
-    public function getRating()
+    public function getRating(): ?int
     {
         return $this->rating;
     }
 
     /**
-     * @param mixed $rating
+     * Set rating
+     *
+     * @param integer $rating
      */
-    public function setRating($rating)
+    public function setRating($rating): void
     {
         $this->rating = $rating;
     }
 
     /**
-     * @return mixed
+     * Get image
+     *
+     * @return File
      */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getImage()
+    public function getImage(): ?File
     {
         return $this->image;
     }
 
     /**
-     * @param mixed $image
+     * Set image
+     *
+     * @param File $image
      */
     public function setImage($image): void
     {

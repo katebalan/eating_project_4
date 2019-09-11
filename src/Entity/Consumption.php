@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+
+use App\Entity\Traits\UpdateTimestampsTrait;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -16,10 +19,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ConsumptionRepository")
  * @ORM\Table(name="consumption")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Consumption
 {
+    use UpdateTimestampsTrait;
+
     /**
+     * Id
+     * @var integer $id
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -28,6 +37,9 @@ class Consumption
     private $id;
 
     /**
+     * User
+     * @var User $user
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"consumption:read", "consumption:write"})
@@ -35,6 +47,9 @@ class Consumption
     private $user;
 
     /**
+     * Product
+     * @var  Products $product
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"consumption:read", "consumption:write"})
@@ -42,119 +57,120 @@ class Consumption
     private $product;
 
     /**
+     * How much
+     * @var integer $howMuch
+     *
      * @ORM\Column(type="integer")
      * @Groups({"consumption:read", "consumption:write"})
      */
-    private $how_much;
+    private $howMuch;
 
     /**
+     * Meals of the day
+     * @var string $mealsOfTheDay
+     *
      * @ORM\Column(type="string", name="meals_of_the_day")
      * @Groups({"consumption:read", "consumption:write"})
      */
     private $mealsOfTheDay;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Groups({"consumption:read", "consumption:write"})
-     */
-    private $createdAt;
-
-    /**
      * Magic to string method
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): ?string
     {
         return (string) $this->getId();
     }
 
     /**
-     * @return mixed
+     * Get Id
+     *
+     * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * Get user
+     *
+     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * @param mixed $user
+     * Set user
+     *
+     * @param User $user
      */
-    public function setUser(User $user)
+    public function setUser(User $user): void
     {
         $this->user = $user;
     }
 
     /**
-     * @return mixed
+     * Get product
+     *
+     * @return Products
      */
-    public function getProduct()
+    public function getProduct(): ?Products
     {
         return $this->product;
     }
 
     /**
-     * @param mixed $product
+     * Set product
+     *
+     * @param Products $product
      */
-    public function setProduct($product)
+    public function setProduct($product): void
     {
         $this->product = $product;
     }
 
     /**
-     * @return mixed
+     * Get how much
+     *
+     * @return integer
      */
-    public function getHowMuch()
+    public function getHowMuch(): ?int
     {
-        return $this->how_much;
+        return $this->howMuch;
     }
 
     /**
-     * @param mixed $how_much
+     * Set how much
+     *
+     * @param integer $howMuch
      */
-    public function setHowMuch($how_much)
+    public function setHowMuch($howMuch): void
     {
-        $this->how_much = $how_much;
+        $this->howMuch = $howMuch;
     }
 
     /**
-     * @return mixed
+     * Get meals of the day
+     *
+     * @return string
      */
-    public function getMealsOfTheDay()
+    public function getMealsOfTheDay(): ?string
     {
         return $this->mealsOfTheDay;
     }
 
     /**
-     * @param mixed $mealsOfTheDay
+     * Set meals of the day
+     *
+     * @param string $mealsOfTheDay
      */
-    public function setMealsOfTheDay($mealsOfTheDay)
+    public function setMealsOfTheDay($mealsOfTheDay): void
     {
         $this->mealsOfTheDay = $mealsOfTheDay;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
 }
