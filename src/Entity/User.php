@@ -5,6 +5,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 
+use App\Entity\Traits\CalorieTrait;
+use App\Entity\Traits\ImageTrait;
+use App\Entity\Traits\TimestampTrait;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,20 +20,25 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class User
  *
  * @ApiResource(
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}},
  * )
  * @ORM\Entity
  * @ORM\Table(name="user")
  * @UniqueEntity(fields={"email"}, message="It looks like you already have account!")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
+    use TimestampTrait, ImageTrait;
+    // @TODO find the way to use trait twice
+    use CalorieTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $id;
 
@@ -37,7 +46,7 @@ class User implements UserInterface
      * @Assert\NotBlank()
      * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $email;
 
@@ -60,125 +69,87 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json_array")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $roles = [];
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $secondName;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $age;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $weight;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $height;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $energyExchange;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $dailyKkal;
-
-    /**
-     * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $dailyProteins;
-
-    /**
-     * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $dailyFats;
-
-    /**
-     * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $dailyCarbohydrates;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $currentKkal = 0;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $currentProteins = 0;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $currentFats = 0;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"read", "write"})
      */
     private $currentCarbohydrates = 0;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Consumption", mappedBy="user")
      * @Groups({"none"})
      */
     private $consumption;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
-     * @Groups({"none"})
-     */
-    private $image;
 
     /**
      * Magic to string method
@@ -442,70 +413,6 @@ class User implements UserInterface
     /**
      * @return mixed
      */
-    public function getDailyKkal()
-    {
-        return $this->dailyKkal;
-    }
-
-    /**
-     * @param mixed $dailyKkal
-     */
-    public function setDailyKkal($dailyKkal)
-    {
-        $this->dailyKkal = $dailyKkal;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDailyProteins()
-    {
-        return $this->dailyProteins;
-    }
-
-    /**
-     * @param mixed $dailyProteins
-     */
-    public function setDailyProteins($dailyProteins)
-    {
-        $this->dailyProteins = $dailyProteins;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDailyFats()
-    {
-        return $this->dailyFats;
-    }
-
-    /**
-     * @param mixed $dailyFats
-     */
-    public function setDailyFats($dailyFats)
-    {
-        $this->dailyFats = $dailyFats;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDailyCarbohydrates()
-    {
-        return $this->dailyCarbohydrates;
-    }
-
-    /**
-     * @param mixed $dailyCarbohydrates
-     */
-    public function setDailyCarbohydrates($dailyCarbohydrates)
-    {
-        $this->dailyCarbohydrates = $dailyCarbohydrates;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getCurrentKkal()
     {
         return $this->currentKkal;
@@ -565,37 +472,5 @@ class User implements UserInterface
     public function setCurrentCarbohydrates($currentCarbohydrates)
     {
         $this->currentCarbohydrates = $currentCarbohydrates;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param mixed $image
-     */
-    public function setImage($image): void
-    {
-        $this->image = $image;
     }
 }

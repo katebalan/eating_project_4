@@ -5,7 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 
-use App\Entity\Traits\UpdateTimestampsTrait;
+use App\Entity\Traits\TimestampTrait;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class Consumption
  *
  * @ApiResource(
- *     normalizationContext={"groups"={"consumption:read"}},
- *     denormalizationContext={"groups"={"consumption:write"}},
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}},
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ConsumptionRepository")
  * @ORM\Table(name="consumption")
@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Consumption
 {
-    use UpdateTimestampsTrait;
+    use TimestampTrait;
 
     /**
      * Id
@@ -33,7 +33,7 @@ class Consumption
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     private $id;
 
@@ -43,7 +43,7 @@ class Consumption
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     private $user;
 
@@ -53,25 +53,26 @@ class Consumption
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     private $product;
 
     /**
      * How much
-     * @var integer $howMuch
+     * @var integer $amount
      *
      * @ORM\Column(type="integer")
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
-    private $howMuch;
+    private $amount;
 
     /**
      * Meals of the day
      * @var string $mealsOfTheDay
+     * @TODO create new entity Period with db translation
      *
      * @ORM\Column(type="string", name="meals_of_the_day")
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     private $mealsOfTheDay;
 
@@ -140,19 +141,19 @@ class Consumption
      *
      * @return integer
      */
-    public function getHowMuch(): ?int
+    public function getAmount(): ?int
     {
-        return $this->howMuch;
+        return $this->amount;
     }
 
     /**
      * Set how much
      *
-     * @param integer $howMuch
+     * @param integer $amount
      */
-    public function setHowMuch($howMuch): void
+    public function setAmount($amount): void
     {
-        $this->howMuch = $howMuch;
+        $this->amount = $amount;
     }
 
     /**

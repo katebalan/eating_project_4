@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Trait UpdateTimestampsTrait
  * @package App\Entity\Traits
  */
-trait UpdateTimestampsTrait
+trait TimestampTrait
 {
     /**
      * Created at
@@ -18,7 +18,7 @@ trait UpdateTimestampsTrait
      *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime()
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     private $createdAt;
 
@@ -28,7 +28,7 @@ trait UpdateTimestampsTrait
      *
      * @ORM\Column(name="updated_at", type="datetime")
      * @Assert\DateTime()
-     * @Groups({"consumption:read", "consumption:write"})
+     * @Groups({"read", "write"})
      */
     protected $updatedAt;
 
