@@ -9,7 +9,6 @@ use App\Entity\Traits\UpdateTimestampsTrait;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  * @ORM\Table(name="activity")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Activity
 {
