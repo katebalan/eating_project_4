@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(
  *     normalizationContext={"groups"={"product:read"}},
- *     denormalizationContext={"groups"={"product:write"}},
+ *     denormalizationContext={"groups"={"product:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductsRepository")
  * @ORM\Table(name="products")
@@ -35,28 +35,28 @@ class Products
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="kkal_per_100gr")
      * @Groups({"product:read", "product:write"})
      */
-    private $kkal_per_100gr;
+    private $kkalPer100Gr;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="proteins_per_100gr")
      * @Groups({"product:read", "product:write"})
      */
-    private $proteins_per_100gr;
+    private $proteinsPer100Gr;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="fats_per_100gr")
      * @Groups({"product:read", "product:write"})
      */
-    private $fats_per_100gr;
+    private $fatsPer100Gr;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="carbohydrates_per_100gr")
      * @Groups({"product:read", "product:write"})
      */
-    private $carbohydrates_per_100gr;
+    private $carbohydratesPer100Gr;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -111,65 +111,65 @@ class Products
     /**
      * @return mixed
      */
-    public function getKkalPer100gr()
+    public function getKkalPer100Gr()
     {
-        return $this->kkal_per_100gr;
+        return $this->kkalPer100Gr;
     }
 
     /**
-     * @param mixed $kkal_per_100gr
+     * @param mixed $kkalPer100Gr
      */
-    public function setKkalPer100gr($kkal_per_100gr)
+    public function setKkalPer100Gr($kkalPer100Gr)
     {
-        $this->kkal_per_100gr = $kkal_per_100gr;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProteinsPer100gr()
-    {
-        return $this->proteins_per_100gr;
-    }
-
-    /**
-     * @param mixed $proteins_per_100gr
-     */
-    public function setProteinsPer100gr($proteins_per_100gr)
-    {
-        $this->proteins_per_100gr = $proteins_per_100gr;
+        $this->kkalPer100Gr = $kkalPer100Gr;
     }
 
     /**
      * @return mixed
      */
-    public function getFatsPer100gr()
+    public function getProteinsPer100Gr()
     {
-        return $this->fats_per_100gr;
+        return $this->proteinsPer100Gr;
     }
 
     /**
-     * @param mixed $fats_per_100gr
+     * @param mixed $proteinsPer100Gr
      */
-    public function setFatsPer100gr($fats_per_100gr)
+    public function setProteinsPer100Gr($proteinsPer100Gr)
     {
-        $this->fats_per_100gr = $fats_per_100gr;
+        $this->proteinsPer100Gr = $proteinsPer100Gr;
     }
 
     /**
      * @return mixed
      */
-    public function getCarbohydratesPer100gr()
+    public function getFatsPer100Gr()
     {
-        return $this->carbohydrates_per_100gr;
+        return $this->fatsPer100Gr;
     }
 
     /**
-     * @param mixed $carbohydrates_per_100gr
+     * @param mixed $fatsPer100Gr
      */
-    public function setCarbohydratesPer100gr($carbohydrates_per_100gr)
+    public function setFatsPer100Gr($fatsPer100Gr)
     {
-        $this->carbohydrates_per_100gr = $carbohydrates_per_100gr;
+        $this->fatsPer100Gr = $fatsPer100Gr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarbohydratesPer100Gr()
+    {
+        return $this->carbohydratesPer100Gr;
+    }
+
+    /**
+     * @param mixed $carbohydratesPer100Gr
+     */
+    public function setCarbohydratesPer100Gr($carbohydratesPer100Gr)
+    {
+        $this->carbohydratesPer100Gr = $carbohydratesPer100Gr;
     }
 
     /**

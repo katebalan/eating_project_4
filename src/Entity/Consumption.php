@@ -3,11 +3,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class Consumption
  *
+ * @ApiResource(
+ *     normalizationContext={"groups"={"consumption:read"}},
+ *     denormalizationContext={"groups"={"consumption:write"}},
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ConsumptionRepository")
  * @ORM\Table(name="consumption")
  */
@@ -17,35 +23,59 @@ class Consumption
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @Groups({"consumption:read", "consumption:write"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"consumption:read", "consumption:write"})
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"consumption:read", "consumption:write"})
      */
     private $product;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"consumption:read", "consumption:write"})
      */
     private $how_much;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="meals_of_the_day")
+     * @Groups({"consumption:read", "consumption:write"})
      */
-    private $meals_of_the_day;
+    private $mealsOfTheDay;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"consumption:read", "consumption:write"})
      */
     private $createdAt;
+
+    /**
+     * Magic to string method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return mixed
@@ -100,15 +130,15 @@ class Consumption
      */
     public function getMealsOfTheDay()
     {
-        return $this->meals_of_the_day;
+        return $this->mealsOfTheDay;
     }
 
     /**
-     * @param mixed $meals_of_the_day
+     * @param mixed $mealsOfTheDay
      */
-    public function setMealsOfTheDay($meals_of_the_day)
+    public function setMealsOfTheDay($mealsOfTheDay)
     {
-        $this->meals_of_the_day = $meals_of_the_day;
+        $this->mealsOfTheDay = $mealsOfTheDay;
     }
 
     /**

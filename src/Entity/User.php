@@ -3,14 +3,20 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
  *
+ * @ApiResource(
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ * )
  * @ORM\Entity
  * @ORM\Table(name="user")
  * @UniqueEntity(fields={"email"}, message="It looks like you already have account!")
@@ -21,6 +27,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @Groups({"user:read", "user:write"})
      */
     private $id;
 
@@ -28,6 +35,7 @@ class User implements UserInterface
      * @Assert\NotBlank()
      * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $email;
 
@@ -35,6 +43,7 @@ class User implements UserInterface
      * The encoded password
      *
      * @ORM\Column(type="string", length=64)
+     * @Groups({"none"})
      */
     private $password;
 
@@ -42,102 +51,122 @@ class User implements UserInterface
      * A non-persisted field that's used to create the encoded password.
      *
      * @Assert\NotBlank(groups={"Registration"})
+     * @Groups({"none"})
      * @var string
      */
     private $plainPassword;
 
     /**
      * @ORM\Column(type="json_array")
+     * @Groups({"user:read", "user:write"})
      */
     private $roles = [];
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
-    private $first_name;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
-    private $second_name;
+    private $secondName;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"user:read", "user:write"})
      */
     private $age;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"user:read", "user:write"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
     private $weight;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
     private $height;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
-    private $energy_exchange;
+    private $energyExchange;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"user:read", "user:write"})
      */
-    private $daily_kkal;
+    private $dailyKkal;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $daily_proteins;
+    private $dailyProteins;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $daily_fats;
+    private $dailyFats;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $daily_carbohydrates;
+    private $dailyCarbohydrates;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"user:read", "user:write"})
      */
-    private $current_kkal = 0;
+    private $currentKkal = 0;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $current_proteins = 0;
+    private $currentProteins = 0;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $current_fats = 0;
+    private $currentFats = 0;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"user:read", "user:write"})
      */
-    private $current_carbohydrates = 0;
+    private $currentCarbohydrates = 0;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user:read", "user:write"})
      */
     private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Consumption", mappedBy="user")
+     * @Groups({"none"})
      */
     private $consumption;
 
@@ -145,6 +174,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", nullable=true)
      *
      * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
+     * @Groups({"none"})
      */
     private $image;
 
@@ -264,39 +294,39 @@ class User implements UserInterface
 
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
-     * @param mixed $first_name
+     * @param string $firstName
      */
-    public function setFirstName($first_name)
+    public function setFirstName($firstName)
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecondName()
     {
-        return $this->second_name;
+        return $this->secondName;
     }
 
     /**
-     * @param mixed $second_name
+     * @param string $secondName
      */
-    public function setSecondName($second_name)
+    public function setSecondName($secondName)
     {
-        $this->second_name = $second_name;
+        $this->secondName = $secondName;
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getAge()
     {
@@ -304,7 +334,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $age
+     * @param integer $age
      */
     public function setAge($age)
     {
@@ -312,7 +342,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getGender()
     {
@@ -320,7 +350,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $gender
+     * @param boolean $gender
      */
     public function setGender($gender)
     {
@@ -328,7 +358,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPhone()
     {
@@ -336,7 +366,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $phone
+     * @param string $phone
      */
     public function setPhone($phone)
     {
@@ -344,7 +374,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
@@ -352,7 +382,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $email
+     * @param string $email
      */
     public function setEmail($email)
     {
@@ -360,7 +390,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getWeight()
     {
@@ -368,7 +398,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $weight
+     * @param float $weight
      */
     public function setWeight($weight)
     {
@@ -376,7 +406,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getHeight()
     {
@@ -384,7 +414,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $height
+     * @param float $height
      */
     public function setHeight($height)
     {
@@ -392,19 +422,19 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getEnergyExchange()
     {
-        return $this->energy_exchange;
+        return $this->energyExchange;
     }
 
     /**
-     * @param mixed $energy_exchange
+     * @param float $energyExchange
      */
-    public function setEnergyExchange($energy_exchange)
+    public function setEnergyExchange($energyExchange)
     {
-        $this->energy_exchange = $energy_exchange;
+        $this->energyExchange = $energyExchange;
     }
 
     /**
@@ -412,15 +442,15 @@ class User implements UserInterface
      */
     public function getDailyKkal()
     {
-        return $this->daily_kkal;
+        return $this->dailyKkal;
     }
 
     /**
-     * @param mixed $daily_kkal
+     * @param mixed $dailyKkal
      */
-    public function setDailyKkal($daily_kkal)
+    public function setDailyKkal($dailyKkal)
     {
-        $this->daily_kkal = $daily_kkal;
+        $this->dailyKkal = $dailyKkal;
     }
 
     /**
@@ -428,15 +458,15 @@ class User implements UserInterface
      */
     public function getDailyProteins()
     {
-        return $this->daily_proteins;
+        return $this->dailyProteins;
     }
 
     /**
-     * @param mixed $daily_proteins
+     * @param mixed $dailyProteins
      */
-    public function setDailyProteins($daily_proteins)
+    public function setDailyProteins($dailyProteins)
     {
-        $this->daily_proteins = $daily_proteins;
+        $this->dailyProteins = $dailyProteins;
     }
 
     /**
@@ -444,15 +474,15 @@ class User implements UserInterface
      */
     public function getDailyFats()
     {
-        return $this->daily_fats;
+        return $this->dailyFats;
     }
 
     /**
-     * @param mixed $daily_fats
+     * @param mixed $dailyFats
      */
-    public function setDailyFats($daily_fats)
+    public function setDailyFats($dailyFats)
     {
-        $this->daily_fats = $daily_fats;
+        $this->dailyFats = $dailyFats;
     }
 
     /**
@@ -460,15 +490,15 @@ class User implements UserInterface
      */
     public function getDailyCarbohydrates()
     {
-        return $this->daily_carbohydrates;
+        return $this->dailyCarbohydrates;
     }
 
     /**
-     * @param mixed $daily_carbohydrates
+     * @param mixed $dailyCarbohydrates
      */
-    public function setDailyCarbohydrates($daily_carbohydrates)
+    public function setDailyCarbohydrates($dailyCarbohydrates)
     {
-        $this->daily_carbohydrates = $daily_carbohydrates;
+        $this->dailyCarbohydrates = $dailyCarbohydrates;
     }
 
     /**
@@ -476,15 +506,15 @@ class User implements UserInterface
      */
     public function getCurrentKkal()
     {
-        return $this->current_kkal;
+        return $this->currentKkal;
     }
 
     /**
-     * @param mixed $current_kkal
+     * @param mixed $currentKkal
      */
-    public function setCurrentKkal($current_kkal)
+    public function setCurrentKkal($currentKkal)
     {
-        $this->current_kkal = $current_kkal;
+        $this->currentKkal = $currentKkal;
     }
 
     /**
@@ -492,15 +522,15 @@ class User implements UserInterface
      */
     public function getCurrentProteins()
     {
-        return $this->current_proteins;
+        return $this->currentProteins;
     }
 
     /**
-     * @param mixed $current_proteins
+     * @param mixed $currentProteins
      */
-    public function setCurrentProteins($current_proteins)
+    public function setCurrentProteins($currentProteins)
     {
-        $this->current_proteins = $current_proteins;
+        $this->currentProteins = $currentProteins;
     }
 
     /**
@@ -508,15 +538,15 @@ class User implements UserInterface
      */
     public function getCurrentFats()
     {
-        return $this->current_fats;
+        return $this->currentFats;
     }
 
     /**
-     * @param mixed $current_fats
+     * @param mixed $currentFats
      */
-    public function setCurrentFats($current_fats)
+    public function setCurrentFats($currentFats)
     {
-        $this->current_fats = $current_fats;
+        $this->currentFats = $currentFats;
     }
 
     /**
@@ -524,15 +554,15 @@ class User implements UserInterface
      */
     public function getCurrentCarbohydrates()
     {
-        return $this->current_carbohydrates;
+        return $this->currentCarbohydrates;
     }
 
     /**
-     * @param mixed $current_carbohydrates
+     * @param mixed $currentCarbohydrates
      */
-    public function setCurrentCarbohydrates($current_carbohydrates)
+    public function setCurrentCarbohydrates($currentCarbohydrates)
     {
-        $this->current_carbohydrates = $current_carbohydrates;
+        $this->currentCarbohydrates = $currentCarbohydrates;
     }
 
     /**

@@ -35,28 +35,28 @@ class Activity
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="kkal_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
-    private $kkal_per_5minutes;
+    private $kkalPer5Minutes;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="proteins_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
-    private $proteins_per_5minutes;
+    private $proteinsPer5Minutes;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="fats_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
-    private $fats_per_5minutes;
+    private $fatsPer5Minutes;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="carbohydrates_per_5minutes")
      * @Groups({"activity:read", "activity:write"})
      */
-    private $carbohydrates_per_5minutes;
+    private $carbohydratesPer5Minutes;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -115,65 +115,65 @@ class Activity
     /**
      * @return mixed
      */
-    public function getKkalPer5minutes()
+    public function getKkalPer5Minutes()
     {
-        return $this->kkal_per_5minutes;
+        return $this->kkalPer5Minutes;
     }
 
     /**
-     * @param mixed $kkal_per_5minutes
+     * @param mixed $kkalPer5Minutes
      */
-    public function setKkalPer5minutes($kkal_per_5minutes)
+    public function setKkalPer5Minutes($kkalPer5Minutes)
     {
-        $this->kkal_per_5minutes = $kkal_per_5minutes;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProteinsPer5minutes()
-    {
-        return $this->proteins_per_5minutes;
-    }
-
-    /**
-     * @param mixed $proteins_per_5minutes
-     */
-    public function setProteinsPer5minutes($proteins_per_5minutes)
-    {
-        $this->proteins_per_5minutes = $proteins_per_5minutes;
+        $this->kkalPer5Minutes = $kkalPer5Minutes;
     }
 
     /**
      * @return mixed
      */
-    public function getFatsPer5minutes()
+    public function getProteinsPer5Minutes()
     {
-        return $this->fats_per_5minutes;
+        return $this->proteinsPer5Minutes;
     }
 
     /**
-     * @param mixed $fats_per_5minutes
+     * @param mixed $proteinsPer5Minutes
      */
-    public function setFatsPer5minutes($fats_per_5minutes)
+    public function setProteinsPer5Minutes($proteinsPer5Minutes)
     {
-        $this->fats_per_5minutes = $fats_per_5minutes;
+        $this->proteinsPer5Minutes = $proteinsPer5Minutes;
     }
 
     /**
      * @return mixed
      */
-    public function getCarbohydratesPer5minutes()
+    public function getFatsPer5Minutes()
     {
-        return $this->carbohydrates_per_5minutes;
+        return $this->fatsPer5Minutes;
     }
 
     /**
-     * @param mixed $carbohydrates_per_5minutes
+     * @param mixed $fatsPer5Minutes
      */
-    public function setCarbohydratesPer5minutes($carbohydrates_per_5minutes)
+    public function setFatsPer5Minutes($fatsPer5Minutes)
     {
-        $this->carbohydrates_per_5minutes = $carbohydrates_per_5minutes;
+        $this->fatsPer5Minutes = $fatsPer5Minutes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarbohydratesPer5Minutes()
+    {
+        return $this->carbohydratesPer5Minutes;
+    }
+
+    /**
+     * @param mixed $carbohydratesPer5Minutes
+     */
+    public function setCarbohydratesPer5Minutes($carbohydratesPer5Minutes)
+    {
+        $this->carbohydratesPer5Minutes = $carbohydratesPer5Minutes;
     }
 
     /**
