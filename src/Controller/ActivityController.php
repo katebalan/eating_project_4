@@ -48,6 +48,7 @@ class ActivityController extends AbstractController
     public function listAction()
     {
         $activity = $this->em->getRepository('App:Activity')->findAll();
+        shuffle ($activity);
 
         return [
             'activity' => $activity

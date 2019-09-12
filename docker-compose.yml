@@ -40,7 +40,7 @@ services:
 #      - python
 #      - test.py
 #    volumes:
-#      - ./python:/var/www/python
+#      - ./docker/python:/var/www/python
 
 volumes:
   db_data:

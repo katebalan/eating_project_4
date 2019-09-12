@@ -49,9 +49,9 @@ class Consumption
 
     /**
      * Product
-     * @var  Products $product
+     * @var  Product $product
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="consumption")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="consumption")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"read", "write"})
      */
@@ -119,9 +119,9 @@ class Consumption
     /**
      * Get product
      *
-     * @return Products
+     * @return Product
      */
-    public function getProduct(): ?Products
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
@@ -129,7 +129,7 @@ class Consumption
     /**
      * Set product
      *
-     * @param Products $product
+     * @param Product $product
      */
     public function setProduct($product): void
     {

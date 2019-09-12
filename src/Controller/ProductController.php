@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Products;
-use App\Form\ProductsFormType;
+use App\Entity\Product;
+use App\Form\ProductFormType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -47,7 +47,8 @@ class ProductController extends AbstractController
      */
     public function listAction()
     {
-        $products = $this->em->getRepository('App:Products')->findAllOrderedByDescActive();
+        $products = $this->em->getRepository('App:Product')->findAllOrderedByDescActive();
+        shuffle ($products);
 
         return [
             'products' => $products
@@ -65,7 +66,7 @@ class ProductController extends AbstractController
      */
     public function newAction(Request $request)
     {
-        $form = $this->createForm(ProductsFormType::class);
+        $form = $this->createForm(ProductFormType::class);
 
         $form->handleRequest($request);
 
@@ -87,12 +88,12 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @param Products $product
+     * @param Product $product
      * @return mixed
      * @Route("/{id}", name="product_show")
      * @Template()
      */
-    public function showAction(?Products $product)
+    public function showAction(?Product $product)
     {
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');
@@ -105,18 +106,18 @@ class ProductController extends AbstractController
 
     /**
      * @param Request $request
-     * @param Products|null $product
+     * @param Product|null $product
      * @return mixed
      * @Route("/{id}/edit", name="product_edit")
      * @Template()
      */
-    public function editAction(Request $request, ?Products $product)
+    public function editAction(Request $request, ?Product $product)
     {
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');
         }
 
-        $form = $this->createForm(ProductsFormType::class, $product);
+        $form = $this->createForm(ProductFormType::class, $product);
 
         $form->handleRequest($request);
 
@@ -137,11 +138,11 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @param Products|null $product
+     * @param Product|null $product
      * @return RedirectResponse
      * @Route("/{id}/delete", name="product_delete")
      */
-    public function deleteAction(?Products $product)
+    public function deleteAction(?Product $product)
     {
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');

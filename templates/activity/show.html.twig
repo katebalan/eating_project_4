@@ -25,10 +25,10 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{{ activity.kkalPer5minutes }}</td>
-                        <td>{{ activity.proteinsPer5minutes }}</td>
-                        <td>{{ activity.fatsPer5minutes }}</td>
-                        <td>{{ activity.carbohydratesPer5minutes }}</td>
+                        <td>{{ activity.calories }}</td>
+                        <td>{{ activity.proteins }}</td>
+                        <td>{{ activity.fats }}</td>
+                        <td>{{ activity.carbohydrates }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -41,7 +41,11 @@
             {% endif %}
         </div>
         <div class="ea-block__right">
-            <img src="{{ activity.image ? asset('files/activity/' ~ activity.image.filename) : asset('img/no-image.png') }}">
+            {% set image_path = activity.image and activity.image.filename is defined
+                ? activity.image.filename
+                : activity.image %}
+            <img src="{{ image_path ? asset('files/activity/' ~ image_path) : asset('img/no-image.png') }}"
+                 alt="{{ activity.name }}">
         </div>
     </div>
 {% endblock %}

@@ -17,10 +17,10 @@
                     <div class="ea-block__date">{{ 'Created at'|trans }} {{ activ.createdAt|date("m/d/Y") }}</div>
                     <div class="ea-devider"></div>
                     <div class="ea-block__info">
-                        kkal: {{ activ.kkalPer5minutes }} /
-                        proteins: {{ activ.proteinsPer5minutes }} /
-                        fats: {{ activ.fatsPer5minutes }} /
-                        carbohydrates: {{ activ.carbohydratesPer5minutes }}
+                        kkal: {{ activ.calories }} /
+                        proteins: {{ activ.proteins }} /
+                        fats: {{ activ.fats }} /
+                        carbohydrates: {{ activ.carbohydrates }}
                     </div>
                     <a href="{{ path('activity_show', {'id': activ.id}) }}" class="btn btn-primary">{{ 'Show'|trans }}</a>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -28,7 +28,11 @@
                     {% endif %}
                 </div>
                 <div class="ea-block__right">
-                    <img src="{{ activ.image ? asset('files/activity/' ~ activ.image.filename) : asset('img/no-image.png') }}">
+                    {% set image_path = activ.image and activ.image.filename is defined
+                        ? activ.image.filename
+                        : activ.image %}
+                    <img src="{{ image_path ? asset('files/activity/' ~ image_path) : asset('img/no-image.png') }}"
+                         alt="{{ activ.name }}">
                 </div>
             </div>
         {% endfor %}

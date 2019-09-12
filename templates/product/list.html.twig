@@ -14,13 +14,13 @@
             <div class="ea-block ea-block--flex ea-block--fixed">
                 <div class="ea-block__left">
                     <div class="ea-block__header">{{ product.name }}</div>
-                    <div class="ea-block__date">Created at {{ product.createdAt|date("m/d/Y") }}</div>
+                    <div class="ea-block__date">{{ 'Created at'|trans }} {{ product.createdAt|date("m/d/Y") }}</div>
                     <div class="ea-devider"></div>
                     <div class="ea-block__info">
-                        kkal: {{ product.kkalPer100gr }} /
-                        proteins: {{ product.proteinsPer100gr }} /
-                        fats: {{ product.fatsPer100gr }} /
-                        carbohydrates: {{ product.carbohydratesPer100gr }}
+                        kkal: {{ product.calories }} /
+                        proteins: {{ product.proteins }} /
+                        fats: {{ product.fats }} /
+                        carbohydrates: {{ product.carbohydrates }}
                     </div>
                     <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">{{ 'Show'|trans }}</a>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -28,7 +28,11 @@
                     {% endif %}
                 </div>
                 <div class="ea-block__right">
-                    <img src="{{ product.image ? asset('files/products/' ~ product.image.filename) : asset('img/no-image.png') }}">
+                    {% set image_path = product.image and product.image.filename is defined
+                                        ? product.image.filename
+                                        : product.image %}
+                    <img src="{{ image_path ? asset('files/product/' ~ image_path) : asset('img/no-image.png') }}"
+                         alt="{{ product.name }}">
                 </div>
             </div>
         {% endfor %}
